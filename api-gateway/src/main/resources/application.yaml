@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: movie_route
+          uri: lb://movie-service
+          predicates:
+            - Path=/api/v1/movies/**
+        - id: review_route
+          uri: lb://review-service
+          predicates:
+            - Path=/api/v1/review/**
+
+
