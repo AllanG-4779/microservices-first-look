@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = Arrays.stream( appUser.getRoles().split(";"))
                 .map(SimpleGrantedAuthority::new).toList();
         this.password = appUser.getPassword();
-        this.username = appUser.getPassword();
+        this.username = appUser.getUsername();
     }
 
     @Override

@@ -1,16 +1,19 @@
 package org.example.security;
 
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.example.config.Jwks;
 import org.example.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -27,12 +30,16 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 import java.util.UUID;
 
 @EnableWebSecurity
@@ -42,6 +49,8 @@ import java.util.UUID;
 public class SecurityConfig {
     @Autowired
     private CustomUserDetailService userDetailService;
+
+    private RSAKey rsaKey;
     @Bean
     UserDetailsService userDetailsService (){
         return new CustomUserDetailService();
@@ -50,29 +59,28 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .authorizeHttpRequests(authz->{
-                    authz.anyRequest().authenticated();
+                .authorizeHttpRequests(authz->
 
-                });
+                    authz.requestMatchers("/api/v1/login").permitAll()
+                    .anyRequest().authenticated()
+
+                );
         http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http
-                .httpBasic().and()
+
                 .build();
     }
 @Bean
-AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-    return    configuration.getAuthenticationManager();
+AuthenticationManager authenticationManager(UserDetailsService userDetailsService) throws Exception {
+   var authProvider = new DaoAuthenticationProvider();
+   authProvider.setUserDetailsService(userDetailsService);
+   authProvider.setPasswordEncoder(passwordEncoder());
+   return new ProviderManager(authProvider);
 
 }
 
-    @Bean
-   AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        authenticationProvider.setUserDetailsService(userDetailService);
-        return authenticationProvider;
-    }
+
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -97,19 +105,33 @@ AuthenticationManager authenticationManager(AuthenticationConfiguration configur
         keyPairGenerator.initialize(2048);
         return keyPairGenerator.generateKeyPair();
     }
-// THE BEANS WILL BE USED TO ENCODE AND DECODE THE JWT PRODUCED BY THE RESOURCE SERVER
-     @Bean
-    JwtDecoder jwtDecoder() throws NoSuchAlgorithmException {
-        return NimbusJwtDecoder.withPublicKey((RSAPublicKey) generateRsaKey().getPublic()).build();
-    }
+
+@Bean
+public JWKSource<SecurityContext> jwkSource() {
+    rsaKey = Jwks.generateRsa();
+    JWKSet jwkSet = new JWKSet(rsaKey);
+    return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
+}
+
     @Bean
-    JwtEncoder jwtEncoder() throws NoSuchAlgorithmException {
-        JWK jwK = generateRsa();
-        JWKSource<SecurityContext> jwks  = new ImmutableJWKSet<>(new JWKSet(jwK));
+    JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwks) {
         return new NimbusJwtEncoder(jwks);
     }
 
+    @Bean
+    JwtDecoder jwtDecoder() throws JOSEException {
+        return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
+    }
 
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 
+        configuration.setAllowedMethods(List.of("GET","POST"));
+        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",configuration);
+        return source;
+    }
 
 }

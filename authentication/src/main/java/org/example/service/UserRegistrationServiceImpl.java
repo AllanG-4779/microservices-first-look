@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dto.LoginRequestDto;
 import org.example.dto.UserDataDto;
 import org.example.dto.UserRegistrationDto;
 import org.example.model.AppUser;
@@ -48,15 +49,13 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     }
 
     @Override
-    public String loginUser(Authentication authentication) {
-
+    public String loginUser(LoginRequestDto loginRequestDto) {
+      Authentication authentication =  authenticationManager.authenticate(
+               new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername()
+                       , loginRequestDto.getPassword())
+       );
 
        return generateToken(authentication);
-
-
-
-
-
     }
 
     @Override
@@ -65,7 +64,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(authentication.getPrincipal().toString())
+                .subject(authentication.getName())
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(3600))
