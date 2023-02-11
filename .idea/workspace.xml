@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bfe05634-822f-4fdb-9838-ba126a388991" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/config/Jwks.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/config/KeyGeneratorUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/dto/LoginRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authentication/src/main/java/org/example/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/controller/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/org/example/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/org/example/service/UserRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/service/UserRegistrationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/org/example/service/UserRegistrationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/service/UserRegistrationServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

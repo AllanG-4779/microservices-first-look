@@ -21,6 +21,7 @@ public class AuthenticationController {
         return registrationService.registerUser(userDataDto);
     }
     @GetMapping("/hello")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public String sayHello(){
         return "Hello Allan";
     }
