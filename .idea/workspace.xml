@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bfe05634-822f-4fdb-9838-ba126a388991" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/org/example/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/org/example/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/org/example/security/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +94,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.AuthenticationApplication">
+  <component name="RunManager" selected="Spring Boot.APIGateway">
     <configuration name="APIGateway" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="api-gateway" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.APIGateway" />
@@ -167,11 +169,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.AuthenticationApplication" />
-        <item itemvalue="Spring Boot.ServiceDiscoveryApplication" />
         <item itemvalue="Spring Boot.APIGateway" />
-        <item itemvalue="Spring Boot.ReviewApplication" />
+        <item itemvalue="Spring Boot.AuthenticationApplication" />
         <item itemvalue="Spring Boot.MovieApplication" />
+        <item itemvalue="Spring Boot.ReviewApplication" />
+        <item itemvalue="Spring Boot.ServiceDiscoveryApplication" />
       </list>
     </recent_temporary>
   </component>
